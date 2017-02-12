@@ -1,6 +1,6 @@
 {
   "name": "react-boilerplate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "app.bundle.js",
   "license": "MIT",
   "dependencies": {

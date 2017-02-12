@@ -6,7 +6,7 @@ var HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
 });
 
 module.exports = {
-  entry: './src/main.jsx',
+  entry: './src/app.jsx',
   resolve: {
     root: __dirname,
     extensions: ['', '.js', '.jsx'],
@@ -15,12 +15,13 @@ module.exports = {
   },
   module: {
     loaders: [
-      {test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader'}
+      {test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader', query: {presets: ["es2015", "react"]}}
     ]
   },
   output: {
     filename: 'app.bundle.js',
     path: __dirname
   },
-  plugins: [HTMLWebpackPluginConfig]
+  plugins: [HTMLWebpackPluginConfig],
+  devtool: 'cheap-module-eval-source-map'
 }
