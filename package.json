@@ -14,11 +14,12 @@
     "babel-preset-react": "^6.23.0",
     "html-webpack-plugin": "^2.28.0",
     "webpack": "^2.2.1",
+    "webpack-dashboard": "^0.3.0",
     "webpack-dev-server": "^2.3.0"
   },
   "scripts": {
     "build": "./node_modules/webpack/bin/webpack.js",
     "production": "./node_modules/webpack/bin/webpack.js --progress -p",
-    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js"
+    "start": "./node_modules/webpack-dashboard/bin/webpack-dashboard.js ./node_modules/webpack-dev-server/bin/webpack-dev-server.js"
   }
 }
