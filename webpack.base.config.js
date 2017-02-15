@@ -1,5 +1,6 @@
 var HTMLWebpackPlugin = require('html-webpack-plugin');
 var path = require('path');
+var webpack = require('webpack');
 
 var HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
   template: path.resolve(__dirname, 'src/index.html'),
@@ -25,7 +26,29 @@ module.exports = function (env) {
     },
     module: {
       rules: [
-        {test: /\.jsx?$/, include: path.resolve(__dirname, 'src'), loader: 'babel-loader', options: {presets: ['es2015', 'react']}}
+        {
+          test: /\.jsx?$/,
+          include: path.resolve(__dirname, 'src'),
+          loader: 'eslint-loader',
+          enforce: 'pre',
+          options: {
+            parserOptions: {
+              ecmaVersion: 2015,
+              sourceType: 'module',
+              ecmaFeatures: {
+                  jsx: true
+              }
+            }
+          }
+        },
+        {
+          test: /\.jsx?$/,
+          include: path.resolve(__dirname, 'src'),
+          loader: 'babel-loader',
+          options: {
+            presets: ['es2015', 'react']
+          }
+        }
       ]
     },
     output: {
