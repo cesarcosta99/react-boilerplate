@@ -1,4 +1,4 @@
-var baseConfig = require('./webpack.base.config');
+var coreConfig = require('./webpack.core');
 var DashboardPlugin = require('webpack-dashboard/plugin');
 var webpack = require('webpack');
 var webpackMerge = require('webpack-merge');
@@ -37,7 +37,7 @@ module.exports = function (env) {
     plugins = [LoaderOptionsPluginConfig, DefinePluginConfig, UglifyJsPluginConfig];
   }
 
-  return webpackMerge(baseConfig(env), {
+  return webpackMerge(coreConfig(env), {
     plugins: plugins
   });
 };
