@@ -1,6 +1,9 @@
 # React Boilerplate
 A **super simple** way to start using React.
 
+[![Dependencies Status](https://david-dm.org/cesarcosta99/react-boilerplate/status.svg)](https://david-dm.org/cesarcosta99/react-boilerplate)
+[![Code Style](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](http://standardjs.com)
+
 ## Why use it?
 This boilerplate provides the whole tooling you need to start developing a React application: Webpack, Babel and a dev server. It also includes ESLint and Sass. Not convinced? It's **production-ready**!
 
