@@ -5,8 +5,8 @@ var webpack = require('webpack');
 
 module.exports = function (env) {
   var extractSass = new ExtractTextPlugin({
-    filename: '[name].css',
-    disable: false
+    filename: '[name].min.css',
+    disable: env !== 'dev' && env !== 'prod'
   });
 
   var HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
@@ -30,7 +30,7 @@ module.exports = function (env) {
           include: path.resolve(__dirname, 'src/scss'),
           use: extractSass.extract({
             use: ['css-loader', 'sass-loader'],
-            fallback: 'style-loader',
+            fallback: 'style-loader'
           })
         },
         {

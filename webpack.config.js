@@ -1,5 +1,6 @@
 var coreConfig = require('./webpack.core');
 var DashboardPlugin = require('webpack-dashboard/plugin');
+var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var webpack = require('webpack');
 var webpackMerge = require('webpack-merge');
 
@@ -28,13 +29,27 @@ var LoaderOptionsPluginConfig = new webpack.LoaderOptionsPlugin({
   debug: false
 });
 
+var OptimizeCssAssetsPluginConfig = new OptimizeCssAssetsPlugin({
+  assetNameRegExp: /\.css$/,
+  cssProcessorOptions: {
+    discardComments: {
+      removeAll: true
+    }
+  }
+});
+
 module.exports = function (env) {
   var plugins = [DashboardPluginConfig];
 
   if (env === 'dev') {
     plugins = [];
   } else if (env === 'prod') {
-    plugins = [LoaderOptionsPluginConfig, DefinePluginConfig, UglifyJsPluginConfig];
+    plugins = [
+      OptimizeCssAssetsPluginConfig,
+      LoaderOptionsPluginConfig,
+      DefinePluginConfig,
+      UglifyJsPluginConfig
+    ];
   }
 
   return webpackMerge(coreConfig(env), {
