@@ -5,7 +5,7 @@ A **super simple** way to start using React.
 [![Code Style](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](http://standardjs.com)
 
 ## Why use it?
-This boilerplate provides the whole tooling you need to start developing a React application: Webpack, Babel and a dev server. It also includes ESLint and Sass. Not convinced? It's **production-ready**!
+This boilerplate provides the whole tooling you need to start a new React application: Webpack, Babel and a dev server. It also includes ESLint and Sass and it's **production-ready**!
 
 ## Install
     $ git clone https://github.com/cesarcosta99/react-boilerplate
@@ -13,16 +13,12 @@ This boilerplate provides the whole tooling you need to start developing a React
     $ npm start
 > **Tip**: you can use [Yarn](https://yarnpkg.com) to install dependencies faster!
 
-After `npm start` the server will be running at [http://localhost:8080](http://localhost:8080).
+After `npm start` the project will be running at [http://localhost:8080](http://localhost:8080).
 
 ## Build
 The build results in three main files: `index.html`, `app.bundle.js` and `main.min.css`:
 
-    $ npm run build:prod
-
-Optionally you can run a development build that excludes some plugins for development purposes, like not minifying CSS:
-    
-    $ npm run build:dev
+    $ npm run build
 
 ## Guidelines
 Below there are some instructions about the tooling:

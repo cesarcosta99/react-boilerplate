@@ -1,18 +1,16 @@
-var coreConfig = require('./webpack.core');
+var path = require('path');
+
 var DashboardPlugin = require('webpack-dashboard/plugin');
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+var ExtractText = require('extract-text-webpack-plugin');
+var HTMLWebpack = require('html-webpack-plugin');
 var webpack = require('webpack');
-var webpackMerge = require('webpack-merge');
 
-var DashboardPluginConfig = new DashboardPlugin();
+var isProd = process.env.NODE_ENV === 'production';
 
-var DefinePluginConfig = new webpack.DefinePlugin({
-  'process.env': {
-    'NODE_ENV': JSON.stringify('production')
-  }
-});
+var DashboardConfig = new DashboardPlugin();
 
-var UglifyJsPluginConfig = new webpack.optimize.UglifyJsPlugin({
+var UglifyJsConfig = new webpack.optimize.UglifyJsPlugin({
   beautify: false,
   mangle: {
     screw_ie8: true,
@@ -29,7 +27,7 @@ var LoaderOptionsPluginConfig = new webpack.LoaderOptionsPlugin({
   debug: false
 });
 
-var OptimizeCssAssetsPluginConfig = new OptimizeCssAssetsPlugin({
+var OptimizeCssAssetsConfig = new OptimizeCssAssetsPlugin({
   assetNameRegExp: /\.css$/,
   cssProcessorOptions: {
     discardComments: {
@@ -38,21 +36,85 @@ var OptimizeCssAssetsPluginConfig = new OptimizeCssAssetsPlugin({
   }
 });
 
-module.exports = function (env) {
-  var plugins = [DashboardPluginConfig];
+var ExtractTextConfig = new ExtractText({
+  filename: '[name].min.css',
+  disable: !isProd
+});
 
-  if (env === 'dev') {
-    plugins = [];
-  } else if (env === 'prod') {
-    plugins = [
-      OptimizeCssAssetsPluginConfig,
-      LoaderOptionsPluginConfig,
-      DefinePluginConfig,
-      UglifyJsPluginConfig
-    ];
-  }
+var HTMLConfig = new HTMLWebpack({
+  template: path.resolve(__dirname, 'src/index.html'),
+  filename: path.resolve(__dirname, 'index.html'),
+  inject: 'body',
+  hash: isProd
+});
 
-  return webpackMerge(coreConfig(env), {
-    plugins: plugins
-  });
+var plugins = [HTMLConfig, ExtractTextConfig];
+if (isProd) {
+  plugins = plugins.concat([
+    OptimizeCssAssetsConfig,
+    LoaderOptionsPluginConfig,
+    DefinePluginConfig,
+    UglifyJsConfig
+  ]);
+} else {
+  plugins.push(DashboardConfig);
+}
+
+module.exports = {
+  entry: path.resolve(__dirname, 'src/app.jsx'),
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+    }
+  },
+  module: {
+    rules: [
+      {
+        test: /\.scss$/,
+        include: path.resolve(__dirname, 'src/scss'),
+        use: ExtractTextConfig.extract({
+          use: ['css-loader', 'sass-loader'],
+          fallback: 'style-loader'
+        })
+      },
+      {
+        test: /\.jsx?$/,
+        include: path.resolve(__dirname, 'src'),
+        enforce: 'pre',
+        use: [
+          {
+            loader: 'eslint-loader',
+            options: {
+              parserOptions: {
+                ecmaVersion: 2015,
+                sourceType: 'module',
+                ecmaFeatures: {
+                    jsx: true
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        test: /\.jsx?$/,
+        include: path.resolve(__dirname, 'src'),
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['es2015', 'react']
+            }
+          }
+        ]
+      }
+    ]
+  },
+  output: {
+    path: path.resolve(__dirname),
+    filename: 'app.bundle.js'
+  },
+  plugins: plugins,
+  devtool: isProd ? undefined : 'cheap-module-eval-source-map',
+  target: 'web'
 };
