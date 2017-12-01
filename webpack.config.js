@@ -48,12 +48,15 @@ var HTMLConfig = new HTMLWebpack({
   hash: isProd
 });
 
-var plugins = [HTMLConfig, ExtractTextConfig];
+var FetchConfig = new webpack.ProvidePlugin({
+  'window.fetch': 'exports?self.fetch!whatwg-fetch'
+});
+
+var plugins = [HTMLConfig, ExtractTextConfig, FetchConfig];
 if (isProd) {
   plugins = plugins.concat([
     OptimizeCssAssetsConfig,
     LoaderOptionsPluginConfig,
-    DefinePluginConfig,
     UglifyJsConfig
   ]);
 } else {
@@ -78,35 +81,41 @@ module.exports = {
         })
       },
       {
-        test: /\.jsx?$/,
-        include: path.resolve(__dirname, 'src'),
-        enforce: 'pre',
-        use: [
-          {
-            loader: 'eslint-loader',
-            options: {
-              parserOptions: {
-                ecmaVersion: 2015,
-                sourceType: 'module',
-                ecmaFeatures: {
-                    jsx: true
-                }
-              }
-            }
+        test: /\.(ttf|eot|svg|woff(2)?)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'public/'
           }
-        ]
+        }]
       },
       {
         test: /\.jsx?$/,
         include: path.resolve(__dirname, 'src'),
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              presets: ['es2015', 'react']
+        enforce: 'pre',
+        use: [{
+          loader: 'eslint-loader',
+          options: {
+            parserOptions: {
+              ecmaVersion: 2015,
+              sourceType: 'module',
+              ecmaFeatures: {
+                jsx: true
+              }
             }
           }
-        ]
+        }]
+      },
+      {
+        test: /\.jsx?$/,
+        include: path.resolve(__dirname, 'src'),
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            presets: ['es2015', 'react']
+          }
+        }]
       }
     ]
   },
@@ -116,5 +125,10 @@ module.exports = {
   },
   plugins: plugins,
   devtool: isProd ? undefined : 'cheap-module-eval-source-map',
-  target: 'web'
+  target: 'web',
+  devServer: {
+    historyApiFallback: true,
+    host: 'localhost',
+    port: 8080
+  }
 };
