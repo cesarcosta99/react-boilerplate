@@ -64,7 +64,10 @@ if (isProd) {
 }
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src/app.jsx'),
+  entry: [
+    'babel-polyfill',
+    path.resolve(__dirname, 'src/app.jsx')
+  ],
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
@@ -98,7 +101,7 @@ module.exports = {
           loader: 'eslint-loader',
           options: {
             parserOptions: {
-              ecmaVersion: 2015,
+              ecmaVersion: 2017,
               sourceType: 'module',
               ecmaFeatures: {
                 jsx: true
@@ -113,7 +116,8 @@ module.exports = {
         use: [{
           loader: 'babel-loader',
           options: {
-            presets: ['es2015', 'react']
+            presets: ['es2015', 'react'],
+            plugins: ['transform-async-to-generator']
           }
         }]
       }
